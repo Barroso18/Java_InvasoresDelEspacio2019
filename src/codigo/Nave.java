@@ -21,11 +21,40 @@ public class Nave {
     public Image imagen = null;
     public int x = 0;
     public int y = 0;
+    private boolean pulsadoIzquierda = false;
+    private boolean pulsadoderecha = false;
     
     public Nave(){
         try {
             imagen = ImageIO.read(getClass().getResource("/imagenes/nave.png"));
         } catch (IOException ex) {
         }
+    }
+    public void mueve(){
+        if(pulsadoIzquierda== true){
+            x++;
+        }
+        if(pulsadoderecha== true){
+            x--;
+        }
+        
+    }
+
+    public boolean isPulsadoIzquierda() {
+        return pulsadoIzquierda;
+    }
+
+    public void setPulsadoIzquierda(boolean pulsadoIzquierda) {
+        this.pulsadoIzquierda = pulsadoIzquierda;
+        this.pulsadoderecha = false;
+    }
+
+    public boolean isPulsadoderecha() {
+        return pulsadoderecha;
+    }
+
+    public void setPulsadoderecha(boolean pulsadoderecha) {
+        this.pulsadoderecha = pulsadoderecha;
+        this.pulsadoIzquierda = false;
     }
 }
