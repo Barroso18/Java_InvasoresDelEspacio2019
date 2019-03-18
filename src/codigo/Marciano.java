@@ -27,7 +27,7 @@ public class Marciano {
         } catch (IOException ex) {
         }
     }
-    public void muevete(){
+    public void mueve(){
         x += vX;
     }
 }
