@@ -10,6 +10,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import javax.swing.Timer;
 
@@ -97,6 +98,12 @@ public class VentanaJuego extends javax.swing.JFrame {
 
     }
     
+    private void chequeaColision(){
+        //Declaramos unas variables de tipo rectangulo
+        Rectangle2D.Double rectanguloMarciano = new Rectangle2D.Double();
+        Rectangle2D.Double rectanguloDisparo = new Rectangle2D.Double();
+    }
+    
     private void cambiaDireccionMarcianos(){
         for(int i=0; i<filas; i++){
             for (int j=0; j<columnas; j++){
@@ -113,7 +120,8 @@ public class VentanaJuego extends javax.swing.JFrame {
                listaMarcianos[i][j].mueve();
                //Chequeo si el marciano ha chocado con la pared 
                // para cambiar la direccion de todos los marcianos 
-               if(listaMarcianos[i][j].x + anchoMarcianos == ANCHOPANTALLA){
+               if(listaMarcianos[i][j].x + anchoMarcianos == ANCHOPANTALLA || 
+                       listaMarcianos[i][j].x + anchoMarcianos == 0){
                    cambiaDireccionMarcianos();
                }
                
