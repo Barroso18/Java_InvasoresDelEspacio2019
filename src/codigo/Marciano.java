@@ -20,6 +20,8 @@ public class Marciano {
     private int vX = 1;
 
     
+
+    
     public Marciano(){
         try {
             imagen1 = ImageIO.read(getClass().getResource("/imagenes/marcianito1.png"));
@@ -29,5 +31,12 @@ public class Marciano {
     }
     public void mueve(){
         x += vX;
+    }
+    public void setvX(int vX) {
+        this.vX = vX;
+    }
+
+    public int getvX() {
+        return vX;
     }
 }
