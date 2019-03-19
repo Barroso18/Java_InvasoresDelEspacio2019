@@ -71,6 +71,7 @@ public class VentanaJuego extends javax.swing.JFrame {
                listaMarcianos[i][j].y = i*(10 + listaMarcianos[i][j].imagen1.getHeight(null));
             }
         }
+        miDisparo.posicionaDisparo(miNave);
     }
     
     private void bucleDelJuego(){
@@ -86,6 +87,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         g2.drawImage(miDisparo.imagen, miDisparo.x, miDisparo.y, null);
         g2.drawImage(miNave.imagen, miNave.x, miNave.y, null);
         pintaMarcianos(g2);
+        chequeaColision();
         miNave.mueve();
         miDisparo.mueve();
         ////////////////////////////////////////////////////////////////////////
@@ -102,11 +104,31 @@ public class VentanaJuego extends javax.swing.JFrame {
         //Declaramos unas variables de tipo rectangulo
         Rectangle2D.Double rectanguloMarciano = new Rectangle2D.Double();
         Rectangle2D.Double rectanguloDisparo = new Rectangle2D.Double();
+        
+        rectanguloDisparo.setFrame( miDisparo.x,
+                                    miDisparo.y,
+                                    miDisparo.imagen.getWidth(null), 
+                                    miDisparo.imagen.getHeight(null)
+                                    );
+        
+        for(int i = 0; i<filas; i++){
+            for (int j = 0; j<columnas; j++){
+                rectanguloMarciano.setFrame(listaMarcianos[i][j].x,
+                                            listaMarcianos[i][j].y,
+                                            listaMarcianos[i][j].imagen1.getWidth(null),
+                                            listaMarcianos[i][j].imagen1.getHeight(null)
+                                            );
+                if(rectanguloDisparo.intersects(rectanguloMarciano)){
+                    listaMarcianos[i][j].y = 2000;
+                    miDisparo.posicionaDisparo(miNave);
+                }
+            }
+        }
     }
     
     private void cambiaDireccionMarcianos(){
-        for(int i=0; i<filas; i++){
-            for (int j=0; j<columnas; j++){
+        for(int i = 0; i<filas; i++){
+            for (int j = 0; j<columnas; j++){
                 listaMarcianos[i][j].setvX(listaMarcianos[i][j].getvX()*-1);
             }
         }
@@ -115,8 +137,8 @@ public class VentanaJuego extends javax.swing.JFrame {
     private void pintaMarcianos(Graphics2D _g2){
         
         int anchoMarcianos = listaMarcianos[0][0].imagen1.getWidth(null);
-        for(int i=0; i<filas; i++){
-            for(int j=0; j<columnas; j++){
+        for(int i = 0; i<filas; i++){
+            for(int j = 0; j<columnas; j++){
                listaMarcianos[i][j].mueve();
                //Chequeo si el marciano ha chocado con la pared 
                // para cambiar la direccion de todos los marcianos 
