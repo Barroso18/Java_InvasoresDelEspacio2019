@@ -128,11 +128,14 @@ public class VentanaJuego extends javax.swing.JFrame {
     }
     
     private void cambiaDireccionMarcianos(){
+//        if(listaMarcianos[0][0].vX < 0){
+//            direccionMarcianos = true;
+//        }
         for(int i = 0; i<filas; i++){
             for (int j = 0; j<columnas; j++){
-                if(direccionMarcianos == true){
+                //if(direccionMarcianos == true){
                     listaMarcianos[i][j].setvX(listaMarcianos[i][j].getvX()*-1);
-                }
+                //}
             }
         }
     }
