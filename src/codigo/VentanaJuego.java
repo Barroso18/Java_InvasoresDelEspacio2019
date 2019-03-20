@@ -71,7 +71,6 @@ public class VentanaJuego extends javax.swing.JFrame {
                listaMarcianos[i][j].y = i*(10 + listaMarcianos[i][j].imagen1.getHeight(null));
             }
         }
-        miDisparo.posicionaDisparo(miNave);
     }
     
     private void bucleDelJuego(){
@@ -121,6 +120,8 @@ public class VentanaJuego extends javax.swing.JFrame {
                 if(rectanguloDisparo.intersects(rectanguloMarciano)){
                     listaMarcianos[i][j].y = 2000;
                     miDisparo.posicionaDisparo(miNave);
+                    miDisparo.disparado = false;
+                    miDisparo.y = 1000;
                 }
             }
         }
@@ -129,7 +130,9 @@ public class VentanaJuego extends javax.swing.JFrame {
     private void cambiaDireccionMarcianos(){
         for(int i = 0; i<filas; i++){
             for (int j = 0; j<columnas; j++){
-                listaMarcianos[i][j].setvX(listaMarcianos[i][j].getvX()*-1);
+                if(direccionMarcianos == true){
+                    listaMarcianos[i][j].setvX(listaMarcianos[i][j].getvX()*-1);
+                }
             }
         }
     }
@@ -214,9 +217,16 @@ public class VentanaJuego extends javax.swing.JFrame {
 
     private void formKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_formKeyPressed
     switch (evt.getKeyCode()){
-        case KeyEvent.VK_LEFT: miNave.setPulsadoIzquierda(true); break;
-        case KeyEvent.VK_RIGHT: miNave.setPulsadoderecha(true); break;
-        case KeyEvent.VK_SPACE: miDisparo.posicionaDisparo(miNave); break;
+        case KeyEvent.VK_LEFT: 
+            miNave.setPulsadoIzquierda(true); 
+            break;
+        case KeyEvent.VK_RIGHT: 
+            miNave.setPulsadoderecha(true); 
+            break;
+        case KeyEvent.VK_SPACE: 
+            miDisparo.posicionaDisparo(miNave); 
+            miDisparo.disparado = true;
+            break;
     }
     }//GEN-LAST:event_formKeyPressed
 
