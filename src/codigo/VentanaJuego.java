@@ -36,8 +36,6 @@ public class VentanaJuego extends javax.swing.JFrame {
     Disparo miDisparo = new Disparo();
 //    Marciano miMarciano = new Marciano();
     Marciano [][] listaMarcianos = new Marciano[filas][columnas];
-    // La variable direccionMarcianos  Si vale falso los marcianos se moveran hacia la derecha y 
-    // si vale verdadero se mueven hacia la izquierda
     boolean direccionMarcianos = false;
     //Contador sirve para decidir que imagen del marciano toca poner
     int contador = 0;
@@ -128,14 +126,9 @@ public class VentanaJuego extends javax.swing.JFrame {
     }
     
     private void cambiaDireccionMarcianos(){
-//        if(listaMarcianos[0][0].vX < 0){
-//            direccionMarcianos = true;
-//        }
         for(int i = 0; i<filas; i++){
             for (int j = 0; j<columnas; j++){
-                //if(direccionMarcianos == true){
-                    listaMarcianos[i][j].setvX(listaMarcianos[i][j].getvX()*-1);
-                //}
+                listaMarcianos[i][j].setvX(listaMarcianos[i][j].getvX()*-1);
             }
         }
     }
@@ -150,7 +143,7 @@ public class VentanaJuego extends javax.swing.JFrame {
                // para cambiar la direccion de todos los marcianos 
                if(listaMarcianos[i][j].x + anchoMarcianos == ANCHOPANTALLA || 
                        listaMarcianos[i][j].x + anchoMarcianos == 0){
-                   cambiaDireccionMarcianos();
+                    direccionMarcianos = true;
                }
                
                if(contador<50){
@@ -167,6 +160,10 @@ public class VentanaJuego extends javax.swing.JFrame {
                }
                else contador = 0;
             }
+        }
+        if(direccionMarcianos == true ){
+            cambiaDireccionMarcianos();
+            direccionMarcianos = false;
         }
     }
 

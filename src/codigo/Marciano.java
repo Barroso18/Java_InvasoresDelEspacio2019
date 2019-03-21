@@ -17,7 +17,7 @@ public class Marciano {
     public Image imagen1,imagen2 = null;
     public int x = 0;
     public int y = 0;
-    public int vX = 1;
+    private int vX = 1;
 
     
 
