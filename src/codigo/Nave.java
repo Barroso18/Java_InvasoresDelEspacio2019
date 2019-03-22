@@ -26,10 +26,10 @@ public class Nave {
 
     
     public Nave(){
-        try {
-            imagen = ImageIO.read(getClass().getResource("/imagenes/nave.png"));
-        } catch (IOException ex) {
-        }
+//        try {
+//            imagen = ImageIO.read(getClass().getResource("/imagenes/nave.png"));
+//        } catch (IOException ex) {
+//        }
     }
     public void mueve(){
         if(pulsadoIzquierda== true && x>0 ){
