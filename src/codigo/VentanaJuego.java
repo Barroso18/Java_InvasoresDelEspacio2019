@@ -17,6 +17,8 @@ import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
 import javax.swing.Timer;
 
 /**
@@ -36,7 +38,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     int columnas = 10; 
     
     BufferedImage buffer = null; 
-    
+    Sonido sonido = new Sonido();
     Nave miNave = new Nave();
     Disparo miDisparo = new Disparo();
 //    Marciano miMarciano = new Marciano();
@@ -47,6 +49,9 @@ public class VentanaJuego extends javax.swing.JFrame {
     //Imagen para cargar el spritsheet con todos los sprites del juego
     BufferedImage plantilla = null;
     Image [] imagenes = new Image[30];
+    
+    //Declaro una variable para contar las bajas 
+    int bajas = 0;
     
     Timer temporizador = new Timer(10, new ActionListener() {
         @Override
@@ -77,6 +82,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
         buffer.createGraphics();
         
+        //Aqui empieza el juego
         temporizador.start();
         
         //Inicializo la posicion inicial de la nave
@@ -147,6 +153,8 @@ public class VentanaJuego extends javax.swing.JFrame {
                         miDisparo.posicionaDisparo(miNave);
                         miDisparo.disparado = false;
                         miDisparo.y = 1000;
+                        bajas++;
+                        sonido.reproduceAudio("/Sonidos/invaderkilled.wav");
                     }
                 }
             }
@@ -196,6 +204,8 @@ public class VentanaJuego extends javax.swing.JFrame {
             direccionMarcianos = false;
         }
     }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -256,6 +266,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         case KeyEvent.VK_SPACE: 
             miDisparo.posicionaDisparo(miNave); 
             miDisparo.disparado = true;
+            sonido.reproduceAudio("/Sonidos/shoot.wav");
             break;
     }
     }//GEN-LAST:event_formKeyPressed
