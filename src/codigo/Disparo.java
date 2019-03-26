@@ -20,10 +20,10 @@ public class Disparo {
     public boolean disparado = false;
     
     public Disparo(){
-        try {
-            imagen = ImageIO.read(getClass().getResource("/imagenes/disparo.png"));
-        } catch (IOException ex) {
-        }
+//        try {
+//            imagen = ImageIO.read(getClass().getResource("/imagenes/disparo.png"));
+//        } catch (IOException ex) {
+//        }
     }
     public void mueve(){
         if (disparado == true){

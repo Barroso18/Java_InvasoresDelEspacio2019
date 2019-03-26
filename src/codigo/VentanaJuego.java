@@ -48,10 +48,12 @@ public class VentanaJuego extends javax.swing.JFrame {
     int contador = 0;
     //Imagen para cargar el spritsheet con todos los sprites del juego
     BufferedImage plantilla = null;
-    Image [] imagenes = new Image[30];
+    Image [][] imagenes;
     
     //Declaro una variable para contar las bajas 
     int bajas = 0;
+    int puntuacion = 0;
+    int puntuacion_maxima = 0;
     
     Timer temporizador = new Timer(10, new ActionListener() {
         @Override
@@ -64,43 +66,78 @@ public class VentanaJuego extends javax.swing.JFrame {
      */
     public VentanaJuego() {
         initComponents();
-        try {
-            plantilla = ImageIO.read(getClass().getResource("/imagenes/invaders2.png"));
-        }catch (IOException ex) {}
-        //Cargo la imagenes de forma individual en cada imagen del array de imagenes 
-        for(int i=0; i<5; i++){
-            for(int j=0; j<4; j++){
-                imagenes[i*4 + j] = plantilla.getSubimage(j*64, i*64, 64, 64);
-                imagenes[i*4 + j] = imagenes[i*4 + j].getScaledInstance(32, 32, Image.SCALE_SMOOTH);
-            }
-        }
-        //La ultima fila del spritesheet solo mide 32 de alto, asi que hay que hacerlo aparte
-        for(int j=0; j<4; j++){
-            imagenes[20+j] = plantilla.getSubimage(j*64, 5*64, 64, 32);
-        }
+        
+        //Para cargar el archivo de imagenes
+        //Primero la ruta del archivo
+        //Segundo el numero de filas que tiene de imagenes
+        //Tercero el numero de columnas que tiene de imagenes
+        //Cuarto lo que mide de ancho el sprite
+        //Quinto lo que mide de alto el sprite
+        //Sexto la escala a la que estan los sprites si pones 2 sera 1/2 es decir a la mitad o castear
+        imagenes = cargaImagenes("/imagenes/invaders2.png", 5, 4, 64,64,0.5);
+        
+        miDisparo.imagen = imagenes[2][3];
         setSize(ANCHOPANTALLA,ALTOPANTALLA);
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
         buffer.createGraphics();
-        
         //Aqui empieza el juego
         temporizador.start();
         
         //Inicializo la posicion inicial de la nave
-        miNave.imagen = imagenes[21];
+        miNave.imagen = imagenes[4][5];
         miNave.x = ANCHOPANTALLA /2 - miNave.imagen.getWidth(this)/2;
         miNave.y = ALTOPANTALLA - miNave.imagen.getHeight(this)-40;
         
         
-        //Inicializo el array de marcianos
-        for(int i=0; i<filas; i++){
-            for(int j=0; j<columnas; j++){
-               listaMarcianos[i][j] = new Marciano();
-               listaMarcianos[i][j].imagen1 = imagenes[2*i];
-               listaMarcianos[i][j].imagen2 = imagenes[2*i+1];
-               listaMarcianos[i][j].x = j*(15 + listaMarcianos[i][j].imagen1.getWidth(null));
-               listaMarcianos[i][j].y = i*(10 + listaMarcianos[i][j].imagen1.getHeight(null));
+        //1º el numero de fila que estoy creando
+        //2º el 
+        
+        creaFilaDeMarcianos(0,0,2);
+        creaFilaDeMarcianos(1,0,2);
+        creaFilaDeMarcianos(2,0,2);
+        creaFilaDeMarcianos(3,0,2);
+        creaFilaDeMarcianos(4,0,2);
+        creaFilaDeMarcianos(5,0,2);
+        creaFilaDeMarcianos(6,0,2);
+        creaFilaDeMarcianos(7,0,2);
+        
+    }
+    
+    private void creaFilaDeMarcianos(int numeroFila, int spriteFila, int spriteColumna){
+        for(int j=0; j<columnas; j++){
+           listaMarcianos[numeroFila][j] = new Marciano();
+           listaMarcianos[numeroFila][j].imagen1 = imagenes[spriteFila][spriteColumna];
+           listaMarcianos[numeroFila][j].imagen2 = imagenes[spriteFila][spriteColumna+1];
+           listaMarcianos[numeroFila][j].x = j*(15 + listaMarcianos[numeroFila][j].imagen1.getWidth(null));
+           listaMarcianos[numeroFila][j].y = numeroFila*(10 + listaMarcianos[numeroFila][j].imagen1.getHeight(null));
+        }        
+    }
+    
+    /*
+        Este metodo va servir para cargar el array de imagenes del sprite sheet . 
+        Devolvera un array de 2 dimensiones con las imagenes tal y como esta en el sprite
+    */
+    
+    private Image[][] cargaImagenes (String nombreArchivo, int numFilas, int numColumnas, int ancho, int alto, double escala){
+        try {
+            plantilla = ImageIO.read(getClass().getResource(nombreArchivo));
+        }catch (IOException ex) {}
+        Image[][] arrayImagenes = new Image[numFilas][numColumnas];
+        //Cargo la imagenes de forma individual en cada imagen del array de imagenes 
+        for(int i=0; i<numFilas; i++){
+            for(int j=0; j<numColumnas; j++){
+                arrayImagenes[i][j] = plantilla.getSubimage(j*ancho, i*alto, ancho, alto);
+                double altoEscalado= (int)alto*escala;
+                double anchoEscalado= (int)ancho*escala;
+                arrayImagenes[i][j]= arrayImagenes[i][j].getScaledInstance((int)anchoEscalado,(int)altoEscalado, Image.SCALE_SMOOTH);
             }
         }
+        //La ultima fila del spritesheet solo mide 32 de alto, asi que hay que hacerlo aparte
+//        for(int j=0; j<4; j++){
+//            imagenes[20+j] = plantilla.getSubimage(j*64, 5*64, 64, 32);
+//        }
+        
+        return arrayImagenes;
     }
     
     private void bucleDelJuego(){
@@ -153,7 +190,9 @@ public class VentanaJuego extends javax.swing.JFrame {
                         miDisparo.posicionaDisparo(miNave);
                         miDisparo.disparado = false;
                         miDisparo.y = 1000;
+                        // Cuando un marciano muere se suma una baja
                         bajas++;
+                        //Cuando un marciano muere suena
                         sonido.reproduceAudio("/Sonidos/invaderkilled.wav");
                     }
                 }
@@ -219,7 +258,6 @@ public class VentanaJuego extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setPreferredSize(new java.awt.Dimension(600, 450));
         setResizable(false);
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
