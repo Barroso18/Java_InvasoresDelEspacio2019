@@ -76,7 +76,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         //Sexto la escala a la que estan los sprites si pones 2 sera 1/2 es decir a la mitad o castear
         imagenes = cargaImagenes("/imagenes/invaders2.png", 5, 4, 64,64,0.5);
         
-        miDisparo.imagen = imagenes[2][3];
+        miDisparo.imagen = imagenes[3][2];
         setSize(ANCHOPANTALLA,ALTOPANTALLA);
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
         buffer.createGraphics();
@@ -84,22 +84,20 @@ public class VentanaJuego extends javax.swing.JFrame {
         temporizador.start();
         
         //Inicializo la posicion inicial de la nave
-        miNave.imagen = imagenes[4][5];
+        miNave.imagen = imagenes[3][2];
         miNave.x = ANCHOPANTALLA /2 - miNave.imagen.getWidth(this)/2;
         miNave.y = ALTOPANTALLA - miNave.imagen.getHeight(this)-40;
         
         
         //1º el numero de fila que estoy creando
-        //2º el 
+        //2º fila dentro del sprite sheet de los marcianos
+        //3º columna dentro del sprite sheet de los marcianos
         
         creaFilaDeMarcianos(0,0,2);
         creaFilaDeMarcianos(1,0,2);
         creaFilaDeMarcianos(2,0,2);
         creaFilaDeMarcianos(3,0,2);
         creaFilaDeMarcianos(4,0,2);
-        creaFilaDeMarcianos(5,0,2);
-        creaFilaDeMarcianos(6,0,2);
-        creaFilaDeMarcianos(7,0,2);
         
     }
     
@@ -127,9 +125,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         for(int i=0; i<numFilas; i++){
             for(int j=0; j<numColumnas; j++){
                 arrayImagenes[i][j] = plantilla.getSubimage(j*ancho, i*alto, ancho, alto);
-                double altoEscalado= (int)alto*escala;
-                double anchoEscalado= (int)ancho*escala;
-                arrayImagenes[i][j]= arrayImagenes[i][j].getScaledInstance((int)anchoEscalado,(int)altoEscalado, Image.SCALE_SMOOTH);
+                arrayImagenes[i][j]= arrayImagenes[i][j].getScaledInstance((int)(ancho*escala),(int)(alto*escala), Image.SCALE_SMOOTH);
             }
         }
         //La ultima fila del spritesheet solo mide 32 de alto, asi que hay que hacerlo aparte
