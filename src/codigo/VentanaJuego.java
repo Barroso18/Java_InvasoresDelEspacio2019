@@ -67,6 +67,14 @@ public class VentanaJuego extends javax.swing.JFrame {
     public VentanaJuego() {
         initComponents();
         
+        
+        
+        setSize(ANCHOPANTALLA,ALTOPANTALLA);
+        buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
+        buffer.createGraphics();
+        //Aqui empieza el juego
+        temporizador.start();
+        
         //Para cargar el archivo de imagenes
         //Primero la ruta del archivo
         //Segundo el numero de filas que tiene de imagenes
@@ -76,28 +84,28 @@ public class VentanaJuego extends javax.swing.JFrame {
         //Sexto la escala a la que estan los sprites si pones 2 sera 1/2 es decir a la mitad o castear
         imagenes = cargaImagenes("/imagenes/invaders2.png", 5, 4, 64,64,0.5);
         
-        miDisparo.imagen = imagenes[3][2];
-        setSize(ANCHOPANTALLA,ALTOPANTALLA);
-        buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
-        buffer.createGraphics();
-        //Aqui empieza el juego
-        temporizador.start();
-        
         //Inicializo la posicion inicial de la nave
         miNave.imagen = imagenes[3][2];
         miNave.x = ANCHOPANTALLA /2 - miNave.imagen.getWidth(this)/2;
         miNave.y = ALTOPANTALLA - miNave.imagen.getHeight(this)-40;
+        //Inicializo la imagen de mi disparo
+        miDisparo.imagen = imagenes[3][2];
         
         
         //1º el numero de fila que estoy creando
         //2º fila dentro del sprite sheet de los marcianos
         //3º columna dentro del sprite sheet de los marcianos
-        
-        creaFilaDeMarcianos(0,0,2);
-        creaFilaDeMarcianos(1,0,2);
-        creaFilaDeMarcianos(2,0,2);
-        creaFilaDeMarcianos(3,0,2);
-        creaFilaDeMarcianos(4,0,2);
+        for(int i=0; i<5; i++){
+           for(int j=0; j<3; j++){ 
+                creaFilaDeMarcianos(i,i,j);
+               
+           }
+        }
+//        creaFilaDeMarcianos(0,0,2);
+//        creaFilaDeMarcianos(1,0,2);
+//        creaFilaDeMarcianos(2,0,2);
+//        creaFilaDeMarcianos(3,0,2);
+//        creaFilaDeMarcianos(4,0,2);
         
     }
     
