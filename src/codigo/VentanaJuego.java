@@ -15,6 +15,8 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
@@ -49,9 +51,13 @@ public class VentanaJuego extends javax.swing.JFrame {
     Image [][] botones;
     int filaBotones = 3;
     int columnaBotones = 7;
-    int anchoBoton = 128;
-    int altoBoton = 49;
-    
+    int anchoBoton = 129;
+    int altoBoton = 50;
+    int ratonX = 0;
+    int ratonY = 0;
+    boolean iniciaJuego = false;
+    Image botonPlay = null;
+    Image fondoPantalla = null;
     
     //Declaro una variable para contar las bajas 
     int bajas = 0;
@@ -77,40 +83,43 @@ public class VentanaJuego extends javax.swing.JFrame {
         buffer.createGraphics();
         botones = cargaBotones("/imagenes/Menu Buttons.png");
 //        pintaMenu();
-        //Aqui empieza el juego
-        temporizador.start();
         
-        //Para cargar el archivo de imagenes
-        //Primero la ruta del archivo
-        //Segundo el numero de filas que tiene de imagenes
-        //Tercero el numero de columnas que tiene de imagenes
-        //Cuarto lo que mide de ancho el sprite
-        //Quinto lo que mide de alto el sprite
-        //Sexto la escala a la que estan los sprites si pones 2 sera 1/2 es decir a la mitad o castear
-        imagenes = cargaImagenes("/imagenes/invaders2.png", 5, 4, 64,64,0.5);
-        
-        //Inicializo la posicion inicial de la nave
-        miNave.imagen = imagenes[3][2];
-        miNave.x = ANCHOPANTALLA /2 - miNave.imagen.getWidth(this)/2;
-        miNave.y = ALTOPANTALLA - miNave.imagen.getHeight(this)-40;
-        //Inicializo la imagen de mi disparo
-        miDisparo.imagen = imagenes[3][2];
-        
-        
-        //1º el numero de fila que estoy creando
-        //2º fila dentro del sprite sheet de los marcianos
-        //3º columna dentro del sprite sheet de los marcianos
-        for(int i=0; i<5; i++){
-           for(int j=0; j<3; j++){  
-                creaFilaDeMarcianos(i,i,j);
-               
-           }
-        }
-//        creaFilaDeMarcianos(0,0,2);
-//        creaFilaDeMarcianos(1,0,2);
-//        creaFilaDeMarcianos(2,0,2);
-//        creaFilaDeMarcianos(3,0,2);
-//        creaFilaDeMarcianos(4,0,2);
+            //Aqui empieza el juego
+            temporizador.start();
+
+            //Para cargar el archivo de imagenes
+            //Primero la ruta del archivo
+            //Segundo el numero de filas que tiene de imagenes
+            //Tercero el numero de columnas que tiene de imagenes
+            //Cuarto lo que mide de ancho el sprite
+            //Quinto lo que mide de alto el sprite
+            //Sexto la escala a la que estan los sprites si pones 2 sera 1/2 es decir a la mitad o castear
+            imagenes = cargaImagenes("/imagenes/invaders2.png", 5, 4, 64,64,0.5);
+            try {
+                fondoPantalla = ImageIO.read(getClass().getResource("/imagenes/fondo_estrellas.jpg"));
+            } catch (IOException ex) {}
+            //Inicializo la posicion inicial de la nave
+//            miNave.imagen = imagenes[3][2];
+            miNave.x = ANCHOPANTALLA /2 - miNave.imagen.getWidth(this)/2;
+            miNave.y = ALTOPANTALLA - miNave.imagen.getHeight(this)-40;
+            //Inicializo la imagen de mi disparo
+            miDisparo.imagen = imagenes[3][2];
+
+
+            //1º el numero de fila que estoy creando
+            //2º fila dentro del sprite sheet de los marcianos
+            //3º columna dentro del sprite sheet de los marcianos
+            for(int i=0; i<5; i++){
+               for(int j=0; j<3; j++){  
+                    creaFilaDeMarcianos(i,i,j);
+
+               }
+            }
+    //        creaFilaDeMarcianos(0,0,2);
+    //        creaFilaDeMarcianos(1,0,2);
+    //        creaFilaDeMarcianos(2,0,2);
+    //        creaFilaDeMarcianos(3,0,2);
+    //        creaFilaDeMarcianos(4,0,2);
         
     }
     
@@ -123,10 +132,13 @@ public class VentanaJuego extends javax.swing.JFrame {
            listaMarcianos[numeroFila][j].y = numeroFila*(10 + listaMarcianos[numeroFila][j].imagen1.getHeight(null));
         }        
     }
-    private void funcionMenuInicio(java.awt.event.KeyEvent evt){
-        
-//        if(evt.getX()>=){
-//        }
+    private void funcionMenuInicio(){
+        int posX_Imagen = 300-anchoBoton/2;
+        int posY_Imagen = 225-altoBoton/2;
+        if((ratonX >= posX_Imagen && ratonX <= posX_Imagen + botonPlay.getWidth(null))
+                && (ratonY >= posY_Imagen && ratonY <= posY_Imagen + botonPlay.getHeight(null))){
+            iniciaJuego = true;
+        }
     }
     //Este método pintara el menu del inicio con todos los botones
     //El punto medio de la pantalla es 300*225
@@ -134,8 +146,10 @@ public class VentanaJuego extends javax.swing.JFrame {
     private void pintaMenu(Graphics2D _g2){
 //        botones;
         
-        Image imagen = botones[1][6];
-                _g2.drawImage(imagen,300,225,null);
+        botonPlay = botones[1][6];
+        
+             _g2.drawImage(botonPlay,300-anchoBoton/2,225-altoBoton/2,null);
+             
     }
     
     // 128*49 tamaño botones
@@ -183,19 +197,24 @@ public class VentanaJuego extends javax.swing.JFrame {
         Graphics2D g2 = (Graphics2D) buffer.getGraphics();
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
-        
-        ////////////////////////////////////////////////////////////////////////
-        //redibujamos aqui cada elemento
-        g2.drawImage(miDisparo.imagen, miDisparo.x, miDisparo.y, null);
-        g2.drawImage(miNave.imagen, miNave.x, miNave.y, null);
-        pintaMarcianos(g2);
-        chequeaColision();
-        miNave.mueve();
-        miDisparo.mueve();
-        ////////////////////////////////////////////////////////////////////////
-        //********************  Fase final, se dibuja*************************//
-        //******************** el buffer de golpe en el jPanel****************//
-        
+        if(iniciaJuego == true){
+            g2.drawImage(fondoPantalla, 0, 0, null);
+            ////////////////////////////////////////////////////////////////////////
+            //redibujamos aqui cada elemento
+            g2.drawImage(miDisparo.imagen, miDisparo.x, miDisparo.y, null);
+            g2.drawImage(miNave.imagen, miNave.x, miNave.y, null);
+            pintaMarcianos(g2);
+            chequeaColision();
+            miNave.mueve();
+            miDisparo.mueve();
+            ////////////////////////////////////////////////////////////////////////
+            //********************  Fase final, se dibuja*************************//
+            //******************** el buffer de golpe en el jPanel****************//
+        }
+        else{
+            pintaMenu(g2);
+            funcionMenuInicio();
+        }
         
         g2 = (Graphics2D) jPanel1.getGraphics();
         g2.drawImage(buffer, 0, 0, null);
@@ -295,6 +314,14 @@ public class VentanaJuego extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                formMousePressed(evt);
+            }
+        });
         addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 formKeyPressed(evt);
@@ -351,6 +378,15 @@ public class VentanaJuego extends javax.swing.JFrame {
         case KeyEvent.VK_RIGHT: miNave.setPulsadoderecha(false); break;
     }
     }//GEN-LAST:event_formKeyReleased
+
+    private void formMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMousePressed
+    
+    }//GEN-LAST:event_formMousePressed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        ratonX = evt.getX();
+        ratonY = evt.getY();
+    }//GEN-LAST:event_formMouseClicked
 
     /**
      * @param args the command line arguments
