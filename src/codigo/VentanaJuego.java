@@ -14,11 +14,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
 import javax.swing.Timer;
 
 /**
@@ -49,6 +45,11 @@ public class VentanaJuego extends javax.swing.JFrame {
     //Imagen para cargar el spritsheet con todos los sprites del juego
     BufferedImage plantilla = null;
     Image [][] imagenes;
+    Image [][] botones;
+    int filaBotones = 3;
+    int columnaBotones = 7;
+    int anchoBoton = 128;
+    int altoBoton = 49;
     
     //Declaro una variable para contar las bajas 
     int bajas = 0;
@@ -67,11 +68,13 @@ public class VentanaJuego extends javax.swing.JFrame {
     public VentanaJuego() {
         initComponents();
         
-        
+//        pintaMenu(g2);
         
         setSize(ANCHOPANTALLA,ALTOPANTALLA);
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
         buffer.createGraphics();
+        botones = cargaBotones("/imagenes/Menu Buttons.png");
+//        pintaMenu();
         //Aqui empieza el juego
         temporizador.start();
         
@@ -96,7 +99,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         //2º fila dentro del sprite sheet de los marcianos
         //3º columna dentro del sprite sheet de los marcianos
         for(int i=0; i<5; i++){
-           for(int j=0; j<3; j++){ 
+           for(int j=0; j<3; j++){  
                 creaFilaDeMarcianos(i,i,j);
                
            }
@@ -118,12 +121,37 @@ public class VentanaJuego extends javax.swing.JFrame {
            listaMarcianos[numeroFila][j].y = numeroFila*(10 + listaMarcianos[numeroFila][j].imagen1.getHeight(null));
         }        
     }
+    private void siguienteNivel(){
+        
+    }
+    //Este método pintara el menu del inicio con todos los botones
+    //El punto medio de la pantalla es 300*225
+    //La y = 350 del boton play
+    private void pintaMenu(Graphics2D _g2){
+//        botones;
+        
+        Image imagen = botones[1][6];
+                _g2.drawImage(imagen,300,225,null);
+    }
     
+    // 128*49 tamaño botones
+    // Aqui se cargaran los botones del juego
+    private Image[][] cargaBotones(String nombreArchivo){
+        try {
+            plantilla = ImageIO.read(getClass().getResource(nombreArchivo));
+        }catch (IOException ex) {}
+        Image[][] arrayBotones = new Image[filaBotones][columnaBotones];
+        for(int i=0; i<filaBotones; i++){
+            for(int j=0; j<columnaBotones; j++){
+              arrayBotones[i][j] = plantilla.getSubimage(j*anchoBoton, i*altoBoton, anchoBoton, altoBoton);
+            }
+        }
+        return arrayBotones;
+    }
     /*
         Este metodo va servir para cargar el array de imagenes del sprite sheet . 
         Devolvera un array de 2 dimensiones con las imagenes tal y como esta en el sprite
     */
-    
     private Image[][] cargaImagenes (String nombreArchivo, int numFilas, int numColumnas, int ancho, int alto, double escala){
         try {
             plantilla = ImageIO.read(getClass().getResource(nombreArchivo));
