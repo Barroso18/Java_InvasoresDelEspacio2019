@@ -11,6 +11,7 @@ import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -50,6 +51,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     int columnaBotones = 7;
     int anchoBoton = 128;
     int altoBoton = 49;
+    
     
     //Declaro una variable para contar las bajas 
     int bajas = 0;
@@ -121,8 +123,10 @@ public class VentanaJuego extends javax.swing.JFrame {
            listaMarcianos[numeroFila][j].y = numeroFila*(10 + listaMarcianos[numeroFila][j].imagen1.getHeight(null));
         }        
     }
-    private void siguienteNivel(){
+    private void funcionMenuInicio(java.awt.event.KeyEvent evt){
         
+//        if(evt.getX()>=){
+//        }
     }
     //Este método pintara el menu del inicio con todos los botones
     //El punto medio de la pantalla es 300*225
