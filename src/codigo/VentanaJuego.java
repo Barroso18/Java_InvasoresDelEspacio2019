@@ -50,13 +50,14 @@ public class VentanaJuego extends javax.swing.JFrame {
     Image [][] imagenes;
     Image [][] botones;
     int filaBotones = 3;
-    int columnaBotones = 7;
+    int columnaBotones = 2;
     int anchoBoton = 129;
     int altoBoton = 50;
     int ratonX = 0;
     int ratonY = 0;
     boolean iniciaJuego = false;
     Image botonPlay = null;
+    Image botonOptions = null;
     Image fondoPantalla = null;
     
     //Declaro una variable para contar las bajas 
@@ -145,7 +146,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     //La y = 350 del boton play
     private void pintaMenu(Graphics2D _g2){
 //        botones;
-        
+        botonOptions = botones[1][6];
         botonPlay = botones[1][6];
         
              _g2.drawImage(botonPlay,300-anchoBoton/2,225-altoBoton/2,null);
