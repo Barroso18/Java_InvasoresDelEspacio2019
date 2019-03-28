@@ -33,8 +33,8 @@ public class VentanaJuego extends javax.swing.JFrame {
     static int ALTOPANTALLA = 450;
     
     //Numero de marcianos que van a aparecer
-    int filas = 5;
-    int columnas = 10; 
+    int filas = 4;
+    int columnas = 8; 
     
     BufferedImage buffer = null; 
     Sonido sonido = new Sonido();
@@ -48,11 +48,11 @@ public class VentanaJuego extends javax.swing.JFrame {
     //Imagen para cargar el spritsheet con todos los sprites del juego
     BufferedImage plantilla = null;
     Image [][] imagenes;
-    Image botones;
+    Image inicio;
     int filaBotones = 5;
     int columnaBotones = 1;
-    int anchoBotonLargo = 268;
-    int altoBoton = 130;
+    int anchoBotonLargo = 200;
+    int altoBoton = 90;
     int ratonX = 0;
     int ratonY = 0;
     boolean iniciaJuego = false;
@@ -61,13 +61,13 @@ public class VentanaJuego extends javax.swing.JFrame {
     Image botonOn = null;
     Image botonOff = null;
     Image fondoPantalla = null;
-    
+    Image hasGanado = null;
     //Declaro una variable para contar las bajas 
     int bajas = 0;
     int puntuacion = 0;
     int puntuacion_maxima = 0;
     
-    Timer temporizador = new Timer(10, new ActionListener() {
+    Timer temporizador = new Timer(5, new ActionListener() {
         @Override
         public void actionPerformed(ActionEvent e) {
             bucleDelJuego();
@@ -84,6 +84,9 @@ public class VentanaJuego extends javax.swing.JFrame {
         setSize(ANCHOPANTALLA,ALTOPANTALLA);
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
         buffer.createGraphics();
+        buffer.setRGB(255,255,255);
+        botonOn = cargaBotones("/imagenes/interruptor_on.png");
+        botonOff = cargaBotones("/imagenes/interruptor_off.png");
 //        pintaMenu();
         
             //Aqui empieza el juego
@@ -96,7 +99,7 @@ public class VentanaJuego extends javax.swing.JFrame {
             //Cuarto lo que mide de ancho el sprite
             //Quinto lo que mide de alto el sprite
             //Sexto la escala a la que estan los sprites si pones 2 sera 1/2 es decir a la mitad o castear
-            imagenes = cargaImagenes("/imagenes/invaders2.png", 5, 4, 64,64,0.5);
+            imagenes = cargaImagenes("/imagenes/spritesheet_Marcianos.png", 2, 4, 196,124,0.258);
             try {
                 fondoPantalla = ImageIO.read(getClass().getResource("/imagenes/fondo_estrellas.jpg"));
             } catch (IOException ex) {}
@@ -105,23 +108,24 @@ public class VentanaJuego extends javax.swing.JFrame {
             miNave.x = ANCHOPANTALLA /2 - miNave.imagen.getWidth(this)/2;
             miNave.y = ALTOPANTALLA - miNave.imagen.getHeight(this)-40;
             //Inicializo la imagen de mi disparo
-            miDisparo.imagen = imagenes[3][2];
+//            miDisparo.imagen = imagenes[3][2];
 
 
             //1º el numero de fila que estoy creando
             //2º fila dentro del sprite sheet de los marcianos
             //3º columna dentro del sprite sheet de los marcianos
-            for(int i=0; i<5; i++){
-               for(int j=0; j<3; j++){  
-                    creaFilaDeMarcianos(i,i,j);
-
-               }
-            }
-    //        creaFilaDeMarcianos(0,0,2);
-    //        creaFilaDeMarcianos(1,0,2);
-    //        creaFilaDeMarcianos(2,0,2);
-    //        creaFilaDeMarcianos(3,0,2);
-    //        creaFilaDeMarcianos(4,0,2);
+//            for(int i=0; i<2; i++){
+//               for(int j=0; j<4; j++){  
+//                    creaFilaDeMarcianos(1,i,j);
+//
+//               }
+//            }
+            creaFilaDeMarcianos(0,0,0);
+            creaFilaDeMarcianos(1,0,2);
+            creaFilaDeMarcianos(2,1,0);
+            creaFilaDeMarcianos(3,1,2);
+            
+            
         
     }
     
@@ -148,12 +152,13 @@ public class VentanaJuego extends javax.swing.JFrame {
     private void pintaMenu(Graphics2D _g2){
 //        botones;
 //        botonOptions = botones[1][4];
-        botonPlay = cargaBotones("/imagenes/Play.png");
+        _g2.setBackground(Color.BLACK);
+        botonPlay = cargaBotones("/imagenes/Play2.png");
         botonOptions = cargaBotones("/imagenes/options.png");
-        botonOn = cargaBotones("/imagenes/interruptor_on.png");
-        botonOff = cargaBotones("/imagenes/interruptor_off.png");
-             _g2.drawImage(botonPlay,300-anchoBotonLargo/2,225-altoBoton/2,null);
+        inicio = cargaBotones("/imagenes/inicioSpaceInvaders.png");
+             _g2.drawImage(botonPlay,300-botonPlay.getWidth(null)/2,225-botonPlay.getHeight(null)/2,null);
             _g2.drawImage(botonOptions,ANCHOPANTALLA-botonOptions.getWidth(null),0,null);
+            _g2.drawImage(inicio,ANCHOPANTALLA/2-inicio.getWidth(null)/2,0,null);
              
     }
     
@@ -165,6 +170,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         }catch (IOException ex) {}
         Image boton = null;
         boton = plantilla;
+        
         return boton;
     }
     /*
@@ -198,7 +204,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         Graphics2D g2 = (Graphics2D) buffer.getGraphics();
         g2.setColor(Color.BLACK);
         g2.fillRect(0, 0, ANCHOPANTALLA, ALTOPANTALLA);
-        if(iniciaJuego == true){
+        if(iniciaJuego == true && bajas<filas*columnas){
             g2.drawImage(fondoPantalla, 0, 0, null);
             ////////////////////////////////////////////////////////////////////////
             //redibujamos aqui cada elemento
@@ -212,9 +218,15 @@ public class VentanaJuego extends javax.swing.JFrame {
             //********************  Fase final, se dibuja*************************//
             //******************** el buffer de golpe en el jPanel****************//
         }
-        else{
+        else if(bajas<filas*columnas){
             pintaMenu(g2);
             funcionMenuInicio();
+            bajas = 0;
+        }
+        else{
+            hasGanado = cargaBotones("/imagenes/you_win.png");
+            g2.drawImage(hasGanado, 0, 0, null);
+            
         }
         
         g2 = (Graphics2D) jPanel1.getGraphics();
@@ -331,6 +343,8 @@ public class VentanaJuego extends javax.swing.JFrame {
                 formKeyReleased(evt);
             }
         });
+
+        jPanel1.setBackground(new java.awt.Color(0, 0, 0));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
