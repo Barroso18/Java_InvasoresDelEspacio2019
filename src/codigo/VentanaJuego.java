@@ -48,16 +48,18 @@ public class VentanaJuego extends javax.swing.JFrame {
     //Imagen para cargar el spritsheet con todos los sprites del juego
     BufferedImage plantilla = null;
     Image [][] imagenes;
-    Image [][] botones;
-    int filaBotones = 3;
-    int columnaBotones = 2;
-    int anchoBoton = 129;
-    int altoBoton = 50;
+    Image botones;
+    int filaBotones = 5;
+    int columnaBotones = 1;
+    int anchoBotonLargo = 268;
+    int altoBoton = 130;
     int ratonX = 0;
     int ratonY = 0;
     boolean iniciaJuego = false;
     Image botonPlay = null;
     Image botonOptions = null;
+    Image botonOn = null;
+    Image botonOff = null;
     Image fondoPantalla = null;
     
     //Declaro una variable para contar las bajas 
@@ -82,7 +84,6 @@ public class VentanaJuego extends javax.swing.JFrame {
         setSize(ANCHOPANTALLA,ALTOPANTALLA);
         buffer = (BufferedImage) jPanel1.createImage(ANCHOPANTALLA,ALTOPANTALLA);
         buffer.createGraphics();
-        botones = cargaBotones("/imagenes/Menu Buttons.png");
 //        pintaMenu();
         
             //Aqui empieza el juego
@@ -134,7 +135,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         }        
     }
     private void funcionMenuInicio(){
-        int posX_Imagen = 300-anchoBoton/2;
+        int posX_Imagen = 300-anchoBotonLargo/2;
         int posY_Imagen = 225-altoBoton/2;
         if((ratonX >= posX_Imagen && ratonX <= posX_Imagen + botonPlay.getWidth(null))
                 && (ratonY >= posY_Imagen && ratonY <= posY_Imagen + botonPlay.getHeight(null))){
@@ -146,26 +147,25 @@ public class VentanaJuego extends javax.swing.JFrame {
     //La y = 350 del boton play
     private void pintaMenu(Graphics2D _g2){
 //        botones;
-        botonOptions = botones[1][6];
-        botonPlay = botones[1][6];
-        
-             _g2.drawImage(botonPlay,300-anchoBoton/2,225-altoBoton/2,null);
+//        botonOptions = botones[1][4];
+        botonPlay = cargaBotones("/imagenes/Play.png");
+        botonOptions = cargaBotones("/imagenes/options.png");
+        botonOn = cargaBotones("/imagenes/interruptor_on.png");
+        botonOff = cargaBotones("/imagenes/interruptor_off.png");
+             _g2.drawImage(botonPlay,300-anchoBotonLargo/2,225-altoBoton/2,null);
+            _g2.drawImage(botonOptions,ANCHOPANTALLA-botonOptions.getWidth(null),0,null);
              
     }
     
     // 128*49 tamaño botones
     // Aqui se cargaran los botones del juego
-    private Image[][] cargaBotones(String nombreArchivo){
+    private Image cargaBotones(String nombreArchivo){
         try {
             plantilla = ImageIO.read(getClass().getResource(nombreArchivo));
         }catch (IOException ex) {}
-        Image[][] arrayBotones = new Image[filaBotones][columnaBotones];
-        for(int i=0; i<filaBotones; i++){
-            for(int j=0; j<columnaBotones; j++){
-              arrayBotones[i][j] = plantilla.getSubimage(j*anchoBoton, i*altoBoton, anchoBoton, altoBoton);
-            }
-        }
-        return arrayBotones;
+        Image boton = null;
+        boton = plantilla;
+        return boton;
     }
     /*
         Este metodo va servir para cargar el array de imagenes del sprite sheet . 
