@@ -15,6 +15,7 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -67,6 +68,9 @@ public class VentanaJuego extends javax.swing.JFrame {
     int bajas = 0;
     int puntuacion = 0;
     int puntuacion_maxima = 0;
+    
+    
+    ArrayList <Explosion> listaExplosiones = new ArrayList();
     
     Timer temporizador = new Timer(5, new ActionListener() {
         @Override
@@ -197,6 +201,25 @@ public class VentanaJuego extends javax.swing.JFrame {
         
         return arrayImagenes;
     }
+    
+     private void pintaExplosiones( Graphics2D g2){
+            //pinto las explosiones
+        for (int i=0; i<listaExplosiones.size(); i++){
+            Explosion e = listaExplosiones.get(i);
+            e.setTiempoDeVida(e.getTiempoDeVida() - 1);
+            if (e.getTiempoDeVida() > 25){
+                g2.drawImage(e.imagen, e.getX(), e.getY(), null);
+            }
+            else {
+                g2.drawImage(e.imagen2, e.getX(), e.getY(), null);
+            }
+            
+             //si el tiempo de vida de la explosión es menor que 0 la elimino
+            if (e.getTiempoDeVida() <= 0){
+                listaExplosiones.remove(i);
+            }
+        }
+}
     
     private void bucleDelJuego(){
         //Gobierna el redibujado de los objetos en el jPanel1
