@@ -23,6 +23,7 @@ public class Nave {
     public int y = 0;
     private boolean pulsadoIzquierda = false;
     private boolean pulsadoderecha = false;
+    public boolean vivo = true;
 
     
     public Nave(){

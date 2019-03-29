@@ -62,6 +62,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     Image botonOff = null;
     Image fondoPantalla = null;
     Image hasGanado = null;
+    Image perdiste = null;
     //Declaro una variable para contar las bajas 
     int bajas = 0;
     int puntuacion = 0;
@@ -218,10 +219,14 @@ public class VentanaJuego extends javax.swing.JFrame {
             //********************  Fase final, se dibuja*************************//
             //******************** el buffer de golpe en el jPanel****************//
         }
-        else if(bajas<filas*columnas){
+        else if(bajas<filas*columnas && miNave.vivo == true){
             pintaMenu(g2);
             funcionMenuInicio();
             bajas = 0;
+        }
+        else if(miNave.vivo == false && bajas<filas*columnas){
+            perdiste = cargaBotones("/imagenes/you_lose.png");
+            g2.drawImage(perdiste, ANCHOPANTALLA/2-perdiste.getWidth(null)/2, ALTOPANTALLA/2-perdiste.getHeight(null), null);
         }
         else{
             hasGanado = cargaBotones("/imagenes/you_win.png");
@@ -238,6 +243,12 @@ public class VentanaJuego extends javax.swing.JFrame {
         //Declaramos unas variables de tipo rectangulo
         Rectangle2D.Double rectanguloMarciano = new Rectangle2D.Double();
         Rectangle2D.Double rectanguloDisparo = new Rectangle2D.Double();
+        Rectangle2D.Double rectanguloNave = new Rectangle2D.Double();
+        
+        rectanguloNave.setFrame(    miNave.x,
+                                    miNave.y,
+                                    miNave.imagen.getWidth(null),
+                                    miNave.imagen.getHeight(null));
         
         rectanguloDisparo.setFrame( miDisparo.x,
                                     miDisparo.y,
@@ -262,6 +273,10 @@ public class VentanaJuego extends javax.swing.JFrame {
                         bajas++;
                         //Cuando un marciano muere suena
                         sonido.reproduceAudio("/Sonidos/invaderkilled.wav");
+                    }
+                    if(rectanguloNave.intersects(rectanguloMarciano)){
+                        miNave.vivo = false;
+                        iniciaJuego = false;
                     }
                 }
             }
