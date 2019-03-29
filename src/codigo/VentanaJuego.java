@@ -30,7 +30,7 @@ public class VentanaJuego extends javax.swing.JFrame {
     
     //Declaramos dos variables estaticas
     static int ANCHOPANTALLA = 600;
-    static int ALTOPANTALLA = 450;
+    static int ALTOPANTALLA = 600;
     
     //Numero de marcianos que van a aparecer
     int filas = 4;
@@ -139,8 +139,8 @@ public class VentanaJuego extends javax.swing.JFrame {
         }        
     }
     private void funcionMenuInicio(){
-        int posX_Imagen = 300-anchoBotonLargo/2;
-        int posY_Imagen = 225-altoBoton/2;
+        int posX_Imagen = ANCHOPANTALLA/2-anchoBotonLargo/2;
+        int posY_Imagen = ALTOPANTALLA/2-altoBoton/2;
         if((ratonX >= posX_Imagen && ratonX <= posX_Imagen + botonPlay.getWidth(null))
                 && (ratonY >= posY_Imagen && ratonY <= posY_Imagen + botonPlay.getHeight(null))){
             iniciaJuego = true;
@@ -156,7 +156,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         botonPlay = cargaBotones("/imagenes/Play2.png");
         botonOptions = cargaBotones("/imagenes/options.png");
         inicio = cargaBotones("/imagenes/inicioSpaceInvaders.png");
-             _g2.drawImage(botonPlay,300-botonPlay.getWidth(null)/2,225-botonPlay.getHeight(null)/2,null);
+             _g2.drawImage(botonPlay,ANCHOPANTALLA/2-botonPlay.getWidth(null)/2,ALTOPANTALLA/2-botonPlay.getHeight(null)/2,null);
             _g2.drawImage(botonOptions,ANCHOPANTALLA-botonOptions.getWidth(null),0,null);
             _g2.drawImage(inicio,ANCHOPANTALLA/2-inicio.getWidth(null)/2,0,null);
              
@@ -272,6 +272,7 @@ public class VentanaJuego extends javax.swing.JFrame {
         for(int i = 0; i<filas; i++){
             for (int j = 0; j<columnas; j++){
                 listaMarcianos[i][j].setvX(listaMarcianos[i][j].getvX()*-1);
+                listaMarcianos[i][j].y+= 20;
             }
         }
     }
@@ -286,7 +287,7 @@ public class VentanaJuego extends javax.swing.JFrame {
                     //Chequeo si el marciano ha chocado con la pared 
                     // para cambiar la direccion de todos los marcianos 
                     if(listaMarcianos[i][j].x + anchoMarcianos == ANCHOPANTALLA || 
-                            listaMarcianos[i][j].x + anchoMarcianos == 0){
+                            listaMarcianos[i][j].x  == 0){
                          direccionMarcianos = true;
                     }
 
