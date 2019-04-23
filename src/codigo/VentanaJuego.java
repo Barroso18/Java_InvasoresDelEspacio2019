@@ -130,8 +130,6 @@ public class VentanaJuego extends javax.swing.JFrame {
             creaFilaDeMarcianos(2,1,0);
             creaFilaDeMarcianos(3,1,2);
             
-            
-        
     }
     
     private void creaFilaDeMarcianos(int numeroFila, int spriteFila, int spriteColumna){
@@ -236,6 +234,7 @@ public class VentanaJuego extends javax.swing.JFrame {
             g2.drawImage(miNave.imagen, miNave.x, miNave.y, null);
             pintaMarcianos(g2);
             chequeaColision();
+            pintaExplosiones(g2);
             miNave.mueve();
             miDisparo.mueve();
             ////////////////////////////////////////////////////////////////////////
@@ -278,7 +277,7 @@ public class VentanaJuego extends javax.swing.JFrame {
                                     miDisparo.imagen.getWidth(null), 
                                     miDisparo.imagen.getHeight(null)
                                     );
-        
+        boolean disparoABorrar = false;
         for(int i = 0; i<filas; i++){
             for (int j = 0; j<columnas; j++){
                 if(listaMarcianos[i][j].vivo){
@@ -288,6 +287,14 @@ public class VentanaJuego extends javax.swing.JFrame {
                                                 listaMarcianos[i][j].imagen1.getHeight(null)
                                                 );
                     if(rectanguloDisparo.intersects(rectanguloMarciano)){
+                        Explosion e = new Explosion();
+                        e.setX(listaMarcianos[i][j].x+10);
+                        e.setY(listaMarcianos[i][j].y+10);
+                        listaExplosiones.add(e);
+                        e.sonidoExplosion.start();
+                        //no borro aqui el disparo para evitar que se cuelgue 
+                        //listaDisparos.remove(j);
+                        disparoABorrar = true;
                         listaMarcianos[i][j].vivo = false;
                         miDisparo.posicionaDisparo(miNave);
                         miDisparo.disparado = false;
